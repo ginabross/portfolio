@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Gina Marie Bross – Portfolio</title>
+<meta name="description" content="Portfolio von Gina Marie Bross: Artist Statement und ausgewählte Projekte.">
+<meta property="og:title" content="Gina Marie Bross – Portfolio">
+<meta property="og:description" content="Artist Statement und ausgewählte Projekte.">
+<meta property="og:type" content="website">
+<style>
+:root{
+  --text:#000;
+  --muted:#6b6b6b;
+  --line:#e5e5e5;
+  --pad:clamp(20px,4vw,56px);
+  --gap:clamp(12px,2vw,28px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:#fff;color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.5}
+a{color:inherit;text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible{outline:2px solid #000;outline-offset:3px}
+h1,h2,h3,p,figure,dl,dd{margin:0}
+h1,h2,h3{font-size:16px;font-weight:400}
+
+.page{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
+
+/* Kopfzeile */
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 32px;padding:28px 0 0}
+.top h1{font-weight:700}
+.top nav{display:flex;gap:24px}
+
+/* Gemeinsames 12-Spalten-Raster: links Beschriftung, rechts Inhalt */
+.row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gap)}
+.row > .label{grid-column:1 / 4}
+.row > .content{grid-column:4 / 13}
+
+/* Artist Statement */
+.statement{padding:clamp(64px,12vw,160px) 0 clamp(64px,10vw,140px)}
+.statement .text{max-width:34em;font-size:clamp(20px,2.1vw,28px);line-height:1.4}
+.statement .text p + p{margin-top:1em}
+
+/* Projekte */
+.projects-head{padding-bottom:20px}
+.project{padding:48px 0 64px;border-top:1px solid var(--line)}
+.project .info{grid-column:1 / 4;align-self:start;position:sticky;top:24px}
+.project .info h3{font-weight:700}
+.project .info .year{color:var(--muted)}
+.project .info p{margin-top:12px;max-width:26em}
+.project .info .meta{color:var(--muted);font-size:14px}
+.gallery{grid-column:4 / 13;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap);align-items:start}
+.gallery figure.wide{grid-column:1 / -1}
+.gallery img{display:block;width:100%;height:auto;background:#f3f3f3}
+
+/* Kontakt */
+.contact{border-top:1px solid var(--line);padding:48px 0 72px}
+.contact .content{display:flex;flex-wrap:wrap;gap:6px 28px}
+
+/* Tablet und Handy: eine Spalte, Text über den Bildern */
+@media (max-width:900px){
+  .row{display:block}
+  .row > .label{margin-bottom:16px;color:var(--muted)}
+  .project .info{position:static;margin-bottom:24px}
+  .project{padding:32px 0 48px}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .top{padding-top:20px}
+  .gallery{grid-template-columns:1fr}
+  .statement{padding:56px 0 64px}
+  .contact{padding:32px 0 48px}
+  .contact .content{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <h1>Gina Marie Bross</h1>
+    <nav aria-label="Seitenbereiche">
+      <a href="#statement">Statement</a>
+      <a href="#projekte">Projekte</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ARTIST STATEMENT: Text einfach ersetzen. Neuer Absatz = neues <p>…</p> -->
+    <section class="statement row" id="statement">
+      <h2 class="label">Artist Statement</h2>
+      <div class="content text">
+        <p>Hier steht dein Artist Statement. Beschreibe in wenigen Absätzen, womit du dich beschäftigst, mit welchen Materialien und Methoden du arbeitest und was dich antreibt.</p>
+        <p>Drei bis fünf Sätze reichen oft aus. Schreibe so, wie du auch sprechen würdest.</p>
+      </div>
+    </section>
+
+    <!-- PROJEKTE -->
+    <section id="projekte" aria-labelledby="projekte-titel">
+      <div class="projects-head row">
+        <h2 class="label" id="projekte-titel">Projekte</h2>
+      </div>
+
+      <!-- Projekt 1 -->
+      <article class="project row">
+        <div class="info">
+          <h3>Projekttitel 1 <span class="year">2025</span></h3>
+          <p>Kurze Beschreibung des Projekts: Worum geht es, wie ist es entstanden?</p>
+          <p class="meta">Technik, Format</p>
+        </div>
+        <div class="gallery">
+          <figure class="wide"><img src="images/projekt-1-01.jpg" width="1600" height="1067" loading="lazy" alt="Projekttitel 1, Ansicht 1"></figure>
+          <figure><img src="images/projekt-1-02.jpg" width="1200" height="1500" loading="lazy" alt="Projekttitel 1, Ansicht 2"></figure>
+          <figure><img src="images/projekt-1-03.jpg" width="1200" height="1500" loading="lazy" alt="Projekttitel 1, Ansicht 3"></figure>
+        </div>
+      </article>
+
+      <!-- Projekt 2 -->
+      <article class="project row">
+        <div class="info">
+          <h3>Projekttitel 2 <span class="year">2024</span></h3>
+          <p>Kurze Beschreibung des Projekts.</p>
+          <p class="meta">Technik, Format</p>
+        </div>
+        <div class="gallery">
+          <figure><img src="images/projekt-2-01.jpg" width="1600" height="1067" loading="lazy" alt="Projekttitel 2, Ansicht 1"></figure>
+          <figure><img src="images/projekt-2-02.jpg" width="1600" height="1067" loading="lazy" alt="Projekttitel 2, Ansicht 2"></figure>
+        </div>
+      </article>
+
+      <!-- Projekt 3 -->
+      <article class="project row">
+        <div class="info">
+          <h3>Projekttitel 3 <span class="year">2023</span></h3>
+          <p>Kurze Beschreibung des Projekts.</p>
+          <p class="meta">Technik, Format</p>
+        </div>
+        <div class="gallery">
+          <figure class="wide"><img src="images/projekt-3-01.jpg" width="1600" height="1067" loading="lazy" alt="Projekttitel 3, Ansicht 1"></figure>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <footer class="contact row" id="kontakt">
+    <h2 class="label">Kontakt</h2>
+    <div class="content">
+      <a href="mailto:deine@email.de">deine@email.de</a>
+      <a href="https://www.instagram.com/dein-name" rel="noopener">Instagram</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
