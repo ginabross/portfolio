@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff">
-<title>Gina Marie Bross – Portfolio</title>
+<title>Gina-Marie Bross – Portfolio</title>
 <meta name="description" content="Portfolio von Gina-Marie Bross: Artist Statement und ausgewählte Projekte.">
-<meta property="og:title" content="Gina Marie Bross – Portfolio">
+<meta property="og:title" content="Gina-Marie Bross – Portfolio">
 <meta property="og:description" content="Artist Statement und ausgewählte Projekte.">
 <meta property="og:type" content="website">
 <style>
@@ -42,6 +42,14 @@ h1,h2,h3{font-size:16px;font-weight:400}
 .statement{padding:48px 0 clamp(64px,10vw,140px)}
 .statement .text{grid-column:7 / 13;max-width:34em;font-size:clamp(17px,1.4vw,20px);line-height:1.5}
 .statement .text p + p{margin-top:1em}
+  .statement .side{grid-column:1 / 4}
+.statement .side h2{margin-bottom:28px}
+.bio p + p{margin-top:1em}
+.shows{grid-column:7 / 13;margin-top:clamp(56px,8vw,112px)}
+.shows h3{color:var(--muted);margin-bottom:24px}
+.shows-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}
+.shows h4{font-size:16px;font-weight:400;color:var(--muted);margin-bottom:16px}
+.show + .show{margin-top:1em}
 
 /* Projekte */
 .projects-head{padding:clamp(64px,12vw,160px) 0 20px}
@@ -61,12 +69,16 @@ h1,h2,h3{font-size:16px;font-weight:400}
 
 /* Tablet und Handy: eine Spalte, Text über den Bildern */
 @media (max-width:900px){
+   .statement .side{margin-bottom:32px}
+  .statement .side h2{color:var(--muted);margin-bottom:12px}
+  .shows{margin-top:48px}
   .row{display:block}
   .row > .label{margin-bottom:16px;color:var(--muted)}
   .project .info{position:static;margin-bottom:24px}
   .project{padding:32px 0 48px}
 }
 @media (max-width:560px){
+   .shows-cols{grid-template-columns:1fr}
   body{font-size:16px}
   .top{padding-top:20px}
   .gallery{grid-template-columns:1fr}
@@ -140,15 +152,40 @@ h1,h2,h3{font-size:16px;font-weight:400}
 
 
      <!-- ARTIST STATEMENT: Text einfach ersetzen. Neuer Absatz = neues <p>…</p> -->
-    <section class="statement row" id="statement">
-      <h2 class="label">about</h2>
+      <section class="statement row" id="statement">
+      <div class="side">
+        <h2>about</h2>
+        <div class="bio">
+          <p>born in 2001</p>
+          <p>since 2023 student in the Class New Genres / Tanja Widmann<br>Academy of Fine Arts Munich</p>
+          <p><a href="mailto:gina-marie.bross@gmx.de">gina-marie.bross@gmx.de</a></p>
+        </div>
+      </div>
+ 
       <div class="content text">
-        <p>Gina-Marie Bross studiert an der Akademie der Bildenden Künste München.</p>
- <p>Ihr Interesse gilt Orten, Blicken und Routinen, die sich unserem unmittelbaren Verständnis entziehen und unseren Alltag dennoch prägen. Ihre Arbeiten bewegen sich zwischen Untersuchung, Dokumentation und Imagination.</p> 
-   <p>In der Verdichtung eröffnen sich räumliche und gesellschaftliche Logiken von Macht, Gewalt und Ausschluss sowie die Sehnsucht nach anderen Orten.
-</p>
+        <p>My artistic practice examines the experiences of the subject in urban, public, and social space. Working with diverse materials and formats, I investigate how spatial politics shape perception, positioning, and the subject's agency. Through interaction with and intervention in existing spatial structures, these dynamics are exposed and made perceptible to the viewer.</p>
+      </div>
+ 
+      <div class="shows">
+        <h3>selected shows</h3>
+        <div class="shows-cols">
+          <div>
+            <h4>2024</h4>
+            <p class="show">script für<br>26. - 30. May<br>GFLK Halle Süd, Bad Tölz</p>
+            <p class="show">Kunst im Karee<br>19. - 21. July<br>84ghz, Munich</p>
+            <p class="show">Jahresausstellung 2024<br>20. - 28. July<br>Academy of Fine Arts Munich</p>
+            <p class="show">where to<br>14. December<br>New G Space, Munich</p>
+          </div>
+          <div>
+            <h4>2025</h4>
+            <p class="show">Zwischen-Welten<br>05. - 27. April<br>Farbenladen, Munich</p>
+            <p class="show">Jahresausstellung 2025<br>26. July - 3. August<br>Academy of Fine Arts Munich</p>
+            <p class="show">AP34<br>29. November 2025<br>Rustavi, Georgia</p>
+          </div>
+        </div>
       </div>
     </section>
+ 
 
   </main>
 
