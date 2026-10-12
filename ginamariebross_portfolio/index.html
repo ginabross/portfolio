@@ -39,12 +39,12 @@ h1,h2,h3{font-size:16px;font-weight:400}
 .row > .content{grid-column:4 / 13}
 
 /* Artist Statement */
-.statement{padding:clamp(64px,12vw,160px) 0 clamp(64px,10vw,140px)}
+.statement{padding:48px 0 clamp(64px,10vw,140px)}
 .statement .text{grid-column:7 / 13;max-width:34em;font-size:clamp(17px,1.4vw,20px);line-height:1.5}
 .statement .text p + p{margin-top:1em}
 
 /* Projekte */
-.projects-head{padding-bottom:20px}
+.projects-head{padding:clamp(64px,12vw,160px) 0 20px}
 .project{padding:48px 0 64px}
 .project .info{grid-column:1 / 4;align-self:start;position:sticky;top:24px}
 .project .info h3{font-weight:700}
@@ -83,24 +83,14 @@ h1,h2,h3{font-size:16px;font-weight:400}
   <header class="top">
     <h1>Gina-Marie Bross</h1>
     <nav aria-label="Seitenbereiche">
-      <a href="#statement">about</a>
-<a href="#projekte">works</a>
-      <a href="#kontakt">contact</a>
+    <a href="#projekte">works</a>
+<a href="#statement">about</a>
+<a href="#kontakt">Kontakt</a>
     </nav>
   </header>
 
   <main>
 
-    <!-- ARTIST STATEMENT: Text einfach ersetzen. Neuer Absatz = neues <p>…</p> -->
-    <section class="statement row" id="statement">
-      <h2 class="label">about</h2>
-      <div class="content text">
-        <p>Gina-Marie Bross studiert an der Akademie der Bildenden Künste München.</p>
- <p>Ihr Interesse gilt Orten, Blicken und Routinen, die sich unserem unmittelbaren Verständnis entziehen und unseren Alltag dennoch prägen. Ihre Arbeiten bewegen sich zwischen Untersuchung, Dokumentation und Imagination.</p> 
-   <p>In der Verdichtung eröffnen sich räumliche und gesellschaftliche Logiken von Macht, Gewalt und Ausschluss sowie die Sehnsucht nach anderen Orten.
-</p>
-      </div>
-    </section>
 
     <!-- PROJEKTE -->
     <section id="projekte" aria-labelledby="projekte-titel">
@@ -146,6 +136,18 @@ h1,h2,h3{font-size:16px;font-weight:400}
           <figure class="wide"><img src="images/projekt-3-01.jpg" width="1600" height="1067" loading="lazy" alt="Projekttitel 3, Ansicht 1"></figure>
         </div>
       </article>
+    </section>
+
+
+     <!-- ARTIST STATEMENT: Text einfach ersetzen. Neuer Absatz = neues <p>…</p> -->
+    <section class="statement row" id="statement">
+      <h2 class="label">about</h2>
+      <div class="content text">
+        <p>Gina-Marie Bross studiert an der Akademie der Bildenden Künste München.</p>
+ <p>Ihr Interesse gilt Orten, Blicken und Routinen, die sich unserem unmittelbaren Verständnis entziehen und unseren Alltag dennoch prägen. Ihre Arbeiten bewegen sich zwischen Untersuchung, Dokumentation und Imagination.</p> 
+   <p>In der Verdichtung eröffnen sich räumliche und gesellschaftliche Logiken von Macht, Gewalt und Ausschluss sowie die Sehnsucht nach anderen Orten.
+</p>
+      </div>
     </section>
 
   </main>
