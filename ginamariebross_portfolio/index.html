@@ -32,6 +32,7 @@ h1,h2,h3{font-size:16px;font-weight:400}
 /* Kopfzeile */
 .top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 32px;padding:28px 0 0}
 .top h1{font-size:clamp(20px,1.8vw,26px);font-weight:400}
+.top h1a{text-decoration:none}
 .top nav{display:flex;gap:24px}
 
 /* Gemeinsames 12-Spalten-Raster: links Beschriftung, rechts Inhalt */
@@ -103,7 +104,7 @@ h1,h2,h3{font-size:16px;font-weight:400}
 <div class="page">
 
   <header class="top">
-    <h1>Gina-Marie Bross</h1>
+    <h1><a href="index.html">Gina Marie Bross</a></h1>
     <nav aria-label="Seitenbereiche">
     <a href="#projekte">works</a>
 <a href="#statement">about</a>
@@ -221,11 +222,20 @@ h1,h2,h3{font-size:16px;font-weight:400}
   <a href="datenschutz.html">Datenschutz</a></div>
 
 </div>
-  <script>
-  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-  window.scrollTo(0, 0);
-  window.addEventListener('load', function () { window.scrollTo(0, 0); });
+ <script>
+  var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+  if (navEntry && navEntry.type === 'reload') {
+    var jumpToTop = function () {
+      var root = document.documentElement;
+      root.style.scrollBehavior = 'auto';
+      window.scrollTo(0, 0);
+      root.style.scrollBehavior = '';
+    };
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    jumpToTop();
+    window.addEventListener('load', jumpToTop);
+  }
 </script>
   <script>
 document.querySelectorAll('.sound').forEach(function (box) {
