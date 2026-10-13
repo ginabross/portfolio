@@ -88,6 +88,15 @@ h1,h2,h3{font-size:16px;font-weight:400}
   .contact .content{flex-direction:column}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  .sound{display:flex;align-items:center;gap:14px}
+.sound .play{width:32px;height:32px;padding:0;border:1px solid #000;border-radius:50%;background:#fff;color:#000;cursor:pointer;display:grid;place-items:center}
+.sound .play svg{width:24px;height:24px;fill:currentColor}
+.sound .i-pause{display:none}
+.sound.is-playing .i-play{display:none}
+.sound.is-playing .i-pause{display:block}
+.sound .play:focus-visible{outline:2px solid #000;outline-offset:3px}
+.sound .time{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+@media (hover:hover){.sound .play:hover{background:#000;color:#fff}}
 </style>
 </head>
 <body>
@@ -135,6 +144,13 @@ h1,h2,h3{font-size:16px;font-weight:400}
         <div class="gallery">
           <figure><img src="images/projekt-2-01.jpg" width="1600" height="1067" loading="lazy" alt="Projekttitel 2, Ansicht 1"></figure>
           <figure><img src="images/projekt-2-02.jpg" width="1600" height="1067" loading="lazy" alt="Projekttitel 2, Ansicht 2"></figure>
+             <figure class="wide sound">
+            <button class="play" type="button" aria-label="Abspielen">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M9 7l9 5-9 5z"/><path class="i-pause" d="M8 7h3v10H8zM13 7h3v10h-3z"/></svg>
+            </button>
+            <span class="time">0:00</span>
+            <audio preload="none" src="audio/projekt-1.mp3"></audio>
+          </figure>
         </div>
       </article>
 
@@ -210,6 +226,28 @@ h1,h2,h3{font-size:16px;font-weight:400}
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   window.scrollTo(0, 0);
   window.addEventListener('load', function () { window.scrollTo(0, 0); });
+</script>
+  <script>
+document.querySelectorAll('.sound').forEach(function (box) {
+  var audio = box.querySelector('audio');
+  var btn = box.querySelector('.play');
+  var time = box.querySelector('.time');
+  function fmt(s) { s = Math.floor(s || 0); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  function show() { time.textContent = fmt(audio.currentTime) + (isFinite(audio.duration) ? ' / ' + fmt(audio.duration) : ''); }
+  btn.addEventListener('click', function () {
+    if (audio.paused) {
+      document.querySelectorAll('.sound audio').forEach(function (a) { if (a !== audio) a.pause(); });
+      audio.play().catch(function () {});
+    } else {
+      audio.pause();
+    }
+  });
+  audio.addEventListener('play', function () { box.classList.add('is-playing'); btn.setAttribute('aria-label', 'Pause'); });
+  audio.addEventListener('pause', function () { box.classList.remove('is-playing'); btn.setAttribute('aria-label', 'Abspielen'); });
+  audio.addEventListener('ended', function () { audio.currentTime = 0; show(); });
+  audio.addEventListener('timeupdate', show);
+  audio.addEventListener('loadedmetadata', show);
+});
 </script>
 </body>
 </html>
