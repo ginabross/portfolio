@@ -205,5 +205,11 @@ h1,h2,h3{font-size:16px;font-weight:400}
   <a href="datenschutz.html">Datenschutz</a></div>
 
 </div>
+  <script>
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  window.scrollTo(0, 0);
+  window.addEventListener('load', function () { window.scrollTo(0, 0); });
+</script>
 </body>
 </html>
