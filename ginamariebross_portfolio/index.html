@@ -4,48 +4,337 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff">
-<title>Gina-Marie Bross</title>
-    <link rel="icon" href="/favicon.png">
-<meta name="description" content="Gina-Marie Bross: works, about, contact.">
-<meta property="og:title" content="Gina-Marie Bross">
-<meta property="og:description" content="works, about, contact">
+<title>Gina Marie Bross</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="description" content="Gina Marie Bross: works, about, contact, research.">
+<meta property="og:title" content="Gina Marie Bross">
+<meta property="og:description" content="works, about, contact, research.">
 <meta property="og:type" content="website">
 <style>
-:root{--text:#000;--muted:#6b6b6b;--pad:clamp(20px,4vw,56px)}
+:root{--text:#000;--muted:#6b6b6b;--line:#cfcfcf;--accent:#ff6a00;--pad:clamp(20px,4vw,56px)}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:#fff;color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.5}
-a{color:inherit;text-underline-offset:6px}
-a:focus-visible{outline:2px solid #000;outline-offset:4px}
-h1,p{margin:0}
-.page{max-width:1440px;margin:0 auto;padding:0 var(--pad);min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
-.top{padding:28px 0 0}
-.top h1{font-size:clamp(20px,1.8vw,26px);font-weight:400}
-.menu{flex:1;display:flex;flex-direction:column;justify-content:center;padding:48px 0}
-.menu a{width:max-content;max-width:100%;font-size:clamp(32px,5vw,64px);line-height:1.3;text-decoration:none}
-.menu a:hover{text-decoration:underline;text-decoration-thickness:2px}
+a{color:inherit}
+h1,p,ul{margin:0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.page{max-width:1440px;margin:0 auto;padding:12px var(--pad) 0;min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
+
+/* Mindmap */
+.graph{position:relative;flex:1;min-height:420px}
+.graph svg{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible}
+.edge{fill:none;stroke:var(--line);stroke-width:1;shape-rendering:geometricPrecision}
+.name{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#000;stroke:#fff;stroke-width:6px;stroke-linejoin:round;paint-order:stroke fill;pointer-events:none;user-select:none}
+.node{cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent}
+.node .hit{fill:transparent}
+.node .ring{fill:none;stroke:transparent;stroke-width:1}
+.node:focus-visible .ring{stroke:var(--accent)}
+.node .dot{fill:var(--accent);transform-box:fill-box;transform-origin:center;transition:transform .2s ease}
+.node text{font-family:Arial,Helvetica,sans-serif;fill:#000;stroke:#fff;stroke-width:5px;stroke-linejoin:round;paint-order:stroke fill;pointer-events:none;user-select:none;transform-box:fill-box;transition:transform .2s ease}
+.node text.start{transform-origin:0% 50%}
+.node text.end{transform-origin:100% 50%}
+.main text{font-size:16px}
+.kid text{font-size:14px}
+.node:hover .dot,.node:focus-visible .dot{transform:scale(1.8)}
+.node:hover text,.node:focus-visible text{transform:scale(1.3)}
+.map-in{animation:mapin .6s ease both}
+@keyframes mapin{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.map-in{animation:none}.node .dot,.node text{transition:none}}
+
+/* Ohne JavaScript: normale Liste */
+.sitemap ul{list-style:none;padding:0}
+.sitemap ul ul{padding-left:1.2em;margin-bottom:12px}
+.sitemap a{text-decoration:none}
+.sitemap > ul > li > a{font-size:clamp(24px,4vw,40px);line-height:1.4}
+.sitemap ul ul a{font-size:16px;color:var(--muted)}
+.sitemap{padding:48px 0}
+body.js .sitemap{display:none}
+body:not(.js) svg{display:none}
+
 .legal{display:flex;gap:24px;padding:0 0 28px;font-size:14px;color:var(--muted)}
-@media (max-width:560px){.top{padding-top:20px}}
 </style>
 </head>
 <body>
 <div class="page">
 
-  <header class="top">
-    <h1>Gina-Marie Bross</h1>
-  </header>
+  <h1 class="sr-only">Gina Marie Bross</h1>
 
-  <nav class="menu" aria-label="Hauptmenü">
-    <a href="portfolio.html#projekte">works</a>
-    <a href="portfolio.html#statement">about</a>
-    <a href="portfolio.html#kontakt">contact</a>
-    <a href="research.html">research</a>
-  </nav>
+  <main class="graph" id="graph">
+    <svg id="svg" role="group" aria-label="Menü als Mindmap"></svg>
+
+    <!--
+      HIER BEARBEITEST DU DIE MINDMAP.
+      Jedes <li> auf oberster Ebene ist ein Punkt der ersten Ordnung. Sie werden
+      der Reihe nach rund um deinen Namen verteilt. Steht in einem Punkt eine
+      weitere Liste <ul>, werden daraus Unterpunkte der zweiten Ordnung.
+      Der Name in der Mitte steht im Feld data-name.
+    -->
+    <nav class="sitemap" id="sitemap" data-name="Gina Marie Bross" aria-label="Hauptmenü">
+      <ul>
+        <li><a href="portfolio.html#projekte">works</a></li>
+        <li><a href="portfolio.html#projekt-1">Projekttitel 1</a></li>
+        <li><a href="portfolio.html#statement">about</a></li>
+        <li><a href="portfolio.html#projekt-2">Projekttitel 2</a></li>
+        <li><a href="research.html">research</a></li>
+        <li><a href="portfolio.html#shows">selected shows</a></li>
+        <li><a href="portfolio.html#projekt-3">Projekttitel 3</a></li>
+        <li><a href="portfolio.html#kontakt">contact</a></li>
+        <li><a href="portfolio.html#statement">artist statement</a></li>
+        <li><a href="mailto:gina-marie.bross@gmx.de">e-mail</a></li>
+      </ul>
+    </nav>
+  </main>
 
   <div class="legal">
     <a href="impressum.html">legal</a>
   </div>
 
 </div>
+
+<script>
+(function () {
+  document.body.classList.add('js');
+
+  var NS = 'http://www.w3.org/2000/svg';
+  var box = document.getElementById('graph');
+  var svg = document.getElementById('svg');
+  var src = document.getElementById('sitemap');
+  var NAME = src.getAttribute('data-name') || '';
+
+  /* 1) Daten aus der Liste im HTML lesen */
+  var MAIN = [];
+  Array.prototype.forEach.call(src.querySelectorAll(':scope > ul > li'), function (li) {
+    var a = li.querySelector(':scope > a');
+    var kids = Array.prototype.map.call(li.querySelectorAll(':scope > ul > li > a'), function (k) {
+      return { label: k.textContent.trim(), href: k.getAttribute('href') };
+    });
+    MAIN.push({ label: a.textContent.trim(), href: a.getAttribute('href'), kids: kids });
+  });
+
+  /* Feste "Zufallswerte": Länge der Äste (Anteil des Maximums) und leichte Winkelabweichung.
+     Sie wiederholen sich bei mehr als 10 Punkten. Ändere sie für ein anderes Bild. */
+  var LEN = [0.96, 0.58, 0.84, 0.52, 1.00, 0.66, 0.90, 0.56, 0.78, 0.70];
+  var JIT = [0.10, -0.16, 0.14, -0.08, 0.18, -0.12, 0.06, 0.16, -0.14, 0.08];
+  var BEND = [0.12, -0.10, 0.08, -0.13, 0.11, -0.07, 0.13, -0.09, 0.07, -0.12];
+
+  var W = 0, H = 0, narrow = false;
+  var NARROW_BELOW = 780;
+  var ROW = 34, PAD = 28;
+
+  function el(name, attrs) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function curve(x1, y1, x2, y2, bend) {
+    var mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x2 - x1, dy = y2 - y1;
+    return 'M' + x1 + ',' + y1 + ' Q' + (mx - dy * bend) + ',' + (my + dx * bend) + ' ' + x2 + ',' + y2;
+  }
+  function sCurve(x1, y1, x2, y2) {
+    var mx = (x1 + x2) / 2;
+    return 'M' + x1 + ',' + y1 + ' C' + mx + ',' + y1 + ' ' + mx + ',' + y2 + ' ' + x2 + ',' + y2;
+  }
+
+  /* Textbreite messen */
+  var cache = {};
+  function measure(text, size, cls) {
+    var key = text + '|' + size + '|' + cls;
+    if (cache[key]) return cache[key];
+    var t = el('text', { 'class': cls, 'font-size': size, x: -9999, y: -9999 });
+    t.textContent = text;
+    svg.appendChild(t);
+    var w = t.getComputedTextLength();
+    svg.removeChild(t);
+    cache[key] = w;
+    return w;
+  }
+  var FS_MAIN = 16, FS_KID = 14;
+
+  function bandGap() { return MAIN.length > 6 ? 8 : 26; }
+  function neededHeight() {
+    var rows = 0;
+    MAIN.forEach(function (m) { rows += Math.max(1, m.kids.length); });
+    return 2 * PAD + rows * ROW + (MAIN.length - 1) * bandGap();
+  }
+
+  /* Beschriftungsrechteck eines Punktes (für die Überlappungsprüfung) */
+  function labelRect(x, y, len, right, gap) {
+    return right ? { l: x - 7, r: x + gap + len, t: y - 11, b: y + 11 } : { l: x - gap - len, r: x + 7, t: y - 11, b: y + 11 };
+  }
+  function hit(a, b, m) { return a.l < b.r + m && a.r > b.l - m && a.t < b.b + m && a.b > b.t - m; }
+
+  /* 2) Lage berechnen */
+  function layout() {
+    var n = MAIN.length, L = { P: [], K: [], start: [] }, i, j;
+    var nameLen = measure(NAME, 14, 'name');
+
+    if (narrow) {
+      var total = neededHeight(), gap = bandGap();
+      var y = Math.max(PAD, (H - total) / 2 + PAD);
+      var nx = 8, ny = H / 2, nameRight = nx + nameLen + 10;
+      L.name = { x: nx, y: ny, anchor: 'start' };
+      MAIN.forEach(function (m, idx) {
+        var rows = Math.max(1, m.kids.length);
+        var len = measure(m.label, FS_MAIN, 'main');
+        /* Mitte der Liste am weitesten rechts, Ränder näher am Namen: so kreuzen die Äste keine Beschriftung */
+        var mid = (n - 1) / 2;
+        var rel = n > 1 ? 1 - Math.abs(idx - mid) / mid : 1;
+        var x = nameRight + 40 + rel * 0.20 * W + (LEN[idx % LEN.length] - 0.75) * 0.04 * W;
+        x = Math.min(x, W - 8 - 16 - len);
+        var py = y + rows * ROW / 2;
+        L.P.push({ x: x, y: py });
+        L.start.push({ x: nameRight, y: ny });
+        var ks = [];
+        for (j = 0; j < m.kids.length; j++) {
+          var kl = measure(m.kids[j].label, FS_KID, 'kid');
+          ks.push({ x: Math.min(x + 0.26 * W, W - 8 - 12 - Math.min(kl, 0.3 * W)), y: y + (j + 0.5) * ROW });
+        }
+        L.K.push(ks);
+        y += rows * ROW + gap;
+      });
+      return L;
+    }
+
+    /* Breite Ansicht: rund um den Namen, Äste unterschiedlich lang */
+    var cx = W / 2, cy = H / 2;
+    var rx = Math.max(90, W / 2 - 140), ry = Math.max(90, H / 2 - 36);
+    var f = [], ang = [];
+    for (i = 0; i < n; i++) {
+      f[i] = LEN[i % LEN.length];
+      ang[i] = -Math.PI / 2 + (i + 0.5) * 2 * Math.PI / n + JIT[i % JIT.length] * (2 * Math.PI / n);
+    }
+    function pos(k) { return { x: cx + Math.cos(ang[k]) * rx * f[k], y: cy + Math.sin(ang[k]) * ry * f[k] }; }
+
+    var nameBox = { l: cx - nameLen / 2 - 14, r: cx + nameLen / 2 + 14, t: cy - 18, b: cy + 18 };
+    var lens = MAIN.map(function (m) { return measure(m.label, FS_MAIN, 'main'); });
+
+    /* Überlappungen auflösen: überlappende Äste leicht verkürzen oder verlängern */
+    for (var it = 0; it < 60; it++) {
+      var rects = [], changed = false;
+      for (i = 0; i < n; i++) {
+        var p = pos(i);
+        rects.push(labelRect(p.x, p.y, lens[i], p.x >= cx, 16));
+      }
+      for (i = 0; i < n; i++) {
+        if (hit(rects[i], nameBox, 4)) { f[i] = Math.min(1.05, f[i] + 0.05); changed = true; }
+        for (j = i + 1; j < n; j++) {
+          if (hit(rects[i], rects[j], 5)) {
+            var k = (f[j] > 0.5) ? j : i;
+            f[k] = (f[k] > 0.5) ? f[k] - 0.05 : f[k] + 0.08;
+            changed = true;
+          }
+        }
+      }
+      if (!changed) break;
+    }
+
+    L.name = { x: cx, y: cy, anchor: 'middle' };
+    var hw = nameLen / 2 + 10, hh = 14;
+    for (i = 0; i < n; i++) {
+      var q = pos(i);
+      L.P.push(q);
+      var dx = q.x - cx, dy = q.y - cy, d = Math.sqrt(dx * dx + dy * dy) || 1;
+      var ux = dx / d, uy = dy / d;
+      var tx = Math.abs(ux) < 1e-6 ? Infinity : hw / Math.abs(ux);
+      var ty = Math.abs(uy) < 1e-6 ? Infinity : hh / Math.abs(uy);
+      var t = Math.min(tx, ty);
+      L.start.push({ x: cx + ux * t, y: cy + uy * t });
+    }
+    MAIN.forEach(function (m, idx) {
+      var p = L.P[idx], k = m.kids.length, ks = [];
+      var base = Math.atan2(p.y - cy, p.x - cx);
+      var dist = Math.max(90, Math.min(150, Math.min(W, H) * 0.20));
+      var span = Math.min(Math.PI * 0.95, (k - 1) * 0.62);
+      for (j = 0; j < k; j++) {
+        var a = base + (k === 1 ? 0 : -span / 2 + span * j / (k - 1));
+        var dd = dist * (1 + 0.25 * (j % 2));
+        ks.push({
+          x: Math.max(24, Math.min(W - 24, p.x + Math.cos(a) * dd)),
+          y: Math.max(24, Math.min(H - 24, p.y + Math.sin(a) * dd))
+        });
+      }
+      L.K.push(ks);
+    });
+    L.cx = cx; L.cy = cy;
+    return L;
+  }
+
+  /* Beschriftung so setzen, dass sie in die Fläche passt, sonst kürzen */
+  function placeLabel(t, x, y, preferRight, gap, label) {
+    var right = preferRight;
+    t.textContent = label;
+    t.setAttribute('y', y);
+    function set(r) { t.setAttribute('text-anchor', r ? 'start' : 'end'); t.setAttribute('x', r ? x + gap : x - gap); t.setAttribute('class', r ? 'start' : 'end'); }
+    set(right);
+    var len = t.getComputedTextLength();
+    var availR = W - (x + gap) - 6, availL = (x - gap) - 6;
+    if (right && len > availR && availL >= len) { right = false; set(false); }
+    else if (!right && len > availL && availR >= len) { right = true; set(true); }
+    var avail = right ? availR : availL;
+    if (len > avail) {
+      var s = label;
+      while (s.length > 1 && t.getComputedTextLength() > avail) { s = s.slice(0, -1); t.textContent = s.replace(/\s+$/, '') + '…'; }
+    }
+    return right;
+  }
+
+  function node(href, cls, label, x, y, hitR, ringR, dotR) {
+    var a = el('a', { 'class': 'node ' + cls, href: href, 'aria-label': label });
+    a.appendChild(el('circle', { 'class': 'hit', cx: x, cy: y, r: hitR }));
+    a.appendChild(el('circle', { 'class': 'ring', cx: x, cy: y, r: ringR }));
+    a.appendChild(el('circle', { 'class': 'dot', cx: x, cy: y, r: dotR }));
+    return a;
+  }
+
+  /* 3) Zeichnen */
+  function render() {
+    var r = box.getBoundingClientRect();
+    W = r.width; narrow = W < NARROW_BELOW;
+    var need = narrow ? neededHeight() : 0;
+    box.style.minHeight = narrow ? need + 'px' : '';
+    H = Math.max(box.getBoundingClientRect().height, need);
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    var L = layout();
+    var edges = el('g', {}), nodes = el('g', {});
+    svg.appendChild(edges);
+    svg.appendChild(nodes);
+
+    var nm = el('text', { 'class': 'name', x: L.name.x, y: L.name.y, 'text-anchor': L.name.anchor, 'dominant-baseline': 'central' });
+    nm.textContent = NAME;
+    svg.appendChild(nm);
+
+    MAIN.forEach(function (m, i) {
+      var p = L.P[i], s = L.start[i];
+      edges.appendChild(el('path', { 'class': 'edge', d: narrow ? sCurve(s.x, s.y, p.x, p.y) : curve(s.x, s.y, p.x, p.y, BEND[i % BEND.length]) }));
+      L.K[i].forEach(function (q) {
+        edges.appendChild(el('path', { 'class': 'edge', d: narrow ? sCurve(p.x, p.y, q.x, q.y) : curve(p.x, p.y, q.x, q.y, -0.12) }));
+      });
+    });
+
+    MAIN.forEach(function (m, i) {
+      var p = L.P[i];
+      var a = node(m.href, 'main', m.label, p.x, p.y, 28, 13, 5.5);
+      var t = el('text', { 'dominant-baseline': 'central' });
+      nodes.appendChild(a); a.appendChild(t);
+      placeLabel(t, p.x, p.y, narrow ? true : p.x >= L.cx, 16, m.label);
+
+      m.kids.forEach(function (k, j) {
+        var q = L.K[i][j];
+        var b = node(k.href, 'kid', k.label, q.x, q.y, 16, 9, 3.5);
+        var u = el('text', { 'dominant-baseline': 'central' });
+        nodes.appendChild(b); b.appendChild(u);
+        placeLabel(u, q.x, q.y, narrow ? true : q.x >= p.x, 12, k.label);
+      });
+    });
+  }
+
+  var t0;
+  window.addEventListener('resize', function () { clearTimeout(t0); t0 = setTimeout(render, 60); });
+  svg.classList.add('map-in');
+  render();
+})();
+</script>
 </body>
 </html>
