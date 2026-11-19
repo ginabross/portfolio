@@ -30,11 +30,15 @@ h1,h2,h3{font-size:16px;font-weight:400}
 .page{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
 
 /* Kopfzeile */
-.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 32px;padding:28px 0 0}
-.top h1{font-size:clamp(20px,1.8vw,26px);font-weight:400}
-.top h1a{text-decoration:none}
-.top nav{display:flex;gap:24px}
 
+.top{display:flex;justify-content:center;padding:28px 0 0}
+.home{display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;padding:4px 14px}
+.home .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);transition:transform .2s ease}
+.home .back{font-size:15px;transition:color .2s ease}
+.home:hover .dot,.home:focus-visible .dot{transform:scale(1.35)}
+.home:hover .back,.home:focus-visible .back{color:var(--accent)}
+.home:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+ 
 /* Gemeinsames 12-Spalten-Raster: links Beschriftung, rechts Inhalt */
 .row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gap)}
 .row > .label{grid-column:1 / 4}
@@ -103,17 +107,13 @@ h1,h2,h3{font-size:16px;font-weight:400}
 <body>
 <div class="page">
 
-  <header class="top">
-    <h1><a href="index.html">Gina-Marie Bross</a></h1>
-  <nav aria-label="Seitenbereiche">
-  <a href="#projekte">works</a>
-  <a href="#statement">about</a>
-  <a href="#kontakt">contact</a>
-  <a href="research.html">research</a>
-</nav>
 
-    </nav>
-  </header>
+<header class="top">
+  <a class="home" href="index.html" aria-label="Zurück zur Startseite">
+    <span class="dot"></span>
+    <span class="back">back</span>
+  </a>
+</header>
 
   <main>
 
