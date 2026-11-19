@@ -11,7 +11,7 @@
 <meta property="og:description" content="works, about, contact, research.">
 <meta property="og:type" content="website">
 <style>
-:root{--text:#000;--muted:#6b6b6b;--line:#cfcfcf;--accent:#ff6a00;--pad:clamp(20px,4vw,56px)}
+:root{--text:#000;--muted:#6b6b6b;--accent:#ff6a00;--pad:clamp(20px,4vw,56px)}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:#fff;color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.5}
@@ -20,19 +20,14 @@ h1,p,ul{margin:0}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .page{max-width:1440px;margin:0 auto;padding:12px var(--pad) 0;min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
 
-/* Mindmap */
+/* Punkte mit Beschriftung, ohne Verbindungen (wie die Graph View in Obsidian) */
 .graph{position:relative;flex:1;min-height:420px}
 .graph svg{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible}
-.edge{fill:none;stroke:var(--line);stroke-width:1;shape-rendering:geometricPrecision}
-.name{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#000;stroke:#fff;stroke-width:6px;stroke-linejoin:round;paint-order:stroke fill;pointer-events:none;user-select:none}
 .node{cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent}
-.node .hit{fill:transparent}
-.node .ring{fill:none;stroke:transparent;stroke-width:1}
-.node:focus-visible .ring{stroke:var(--accent)}
+.node .hit{fill:transparent;stroke:transparent;stroke-width:1}
+.node:focus-visible .hit{stroke:var(--accent)}
 .node .dot{fill:var(--accent);transform-box:fill-box;transform-origin:center;transition:transform .2s ease}
-.node text{font-family:Arial,Helvetica,sans-serif;fill:#000;stroke:#fff;stroke-width:5px;stroke-linejoin:round;paint-order:stroke fill;pointer-events:none;user-select:none;transition:fill .2s ease}
-.main text{font-size:16px}
-.kid text{font-size:14px}
+.node text{font-family:Arial,Helvetica,sans-serif;font-size:15px;fill:#000;pointer-events:none;user-select:none;transition:fill .2s ease}
 .node:hover .dot,.node:focus-visible .dot{transform:scale(1.35)}
 .node:hover text,.node:focus-visible text{fill:var(--accent)}
 .map-in{animation:mapin .6s ease both}
@@ -58,16 +53,14 @@ body:not(.js) svg{display:none}
   <h1 class="sr-only">Gina-Marie Bross</h1>
 
   <main class="graph" id="graph">
-    <svg id="svg" role="group" aria-label="Menü als Mindmap"></svg>
+    <svg id="svg" role="group" aria-label="Menü"></svg>
 
     <!--
-      HIER BEARBEITEST DU DIE MINDMAP.
-      Jedes <li> auf oberster Ebene ist ein Punkt der ersten Ordnung. Sie werden
-      der Reihe nach rund um deinen Namen verteilt. Steht in einem Punkt eine
-      weitere Liste <ul>, werden daraus Unterpunkte der zweiten Ordnung.
-      Der Name in der Mitte steht im Feld data-name.
+      HIER BEARBEITEST DU DIE PUNKTE.
+      Jede Zeile <li> ist ein Punkt. Ändere Text und Link oder füge Zeilen hinzu
+      oder lösche sie. Die Punkte ordnen sich automatisch an.
     -->
-    <nav class="sitemap" id="sitemap" data-name="Gina-Marie Bross" aria-label="Hauptmenü">
+    <nav class="sitemap" id="sitemap" aria-label="Hauptmenü">
       <ul>
         <li><a href="portfolio.html#projekte">works</a></li>
         <li><a href="portfolio.html#projekt-1">Projekttitel 1</a></li>
@@ -97,201 +90,83 @@ body:not(.js) svg{display:none}
   var box = document.getElementById('graph');
   var svg = document.getElementById('svg');
   var src = document.getElementById('sitemap');
-  var NAME = src.getAttribute('data-name') || '';
 
-  /* 1) Daten aus der Liste im HTML lesen */
-  var MAIN = [];
-  Array.prototype.forEach.call(src.querySelectorAll(':scope > ul > li'), function (li) {
-    var a = li.querySelector(':scope > a');
-    var kids = Array.prototype.map.call(li.querySelectorAll(':scope > ul > li > a'), function (k) {
-      return { label: k.textContent.trim(), href: k.getAttribute('href') };
-    });
-    MAIN.push({ label: a.textContent.trim(), href: a.getAttribute('href'), kids: kids });
+  /* 1) Punkte aus der Liste im HTML lesen */
+  var ITEMS = Array.prototype.map.call(src.querySelectorAll('li > a'), function (a) {
+    return { label: a.textContent.trim(), href: a.getAttribute('href') };
   });
 
-  /* Feste "Zufallswerte": Länge der Äste (Anteil des Maximums) und leichte Winkelabweichung.
-     Sie wiederholen sich bei mehr als 10 Punkten. Ändere sie für ein anderes Bild. */
-  var LEN = [0.96, 0.58, 0.84, 0.52, 1.00, 0.66, 0.90, 0.56, 0.78, 0.70];
-  var JIT = [0.10, -0.16, 0.14, -0.08, 0.18, -0.12, 0.06, 0.16, -0.14, 0.08];
-  var BEND = [0.12, -0.10, 0.08, -0.13, 0.11, -0.07, 0.13, -0.09, 0.07, -0.12];
+  /* Lage der zehn Punkte (Anteile der Fläche, eng zusammen). Bei anderer Anzahl wird automatisch verteilt. */
+  var LAY10 = [[0.636, 0.271], [0.751, 0.448], [0.496, 0.352], [0.661, 0.604], [0.398, 0.285],
+               [0.339, 0.515], [0.526, 0.567], [0.419, 0.700], [0.270, 0.352], [0.585, 0.744]];
+  var ZIGZAG = [0.28, 0.72, 0.45, 0.78, 0.22, 0.58, 0.30, 0.74, 0.40, 0.66];
 
-  var W = 0, H = 0, narrow = false;
+  /* Bewegung bei der Maus: Radius, Stärke, Feder, Dämpfung */
+  var R = 120, PUSH = 1.1, SPRING = 0.10, DAMP = 0.84;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var NARROW_BELOW = 780;
-  var ROW = 34, PAD = 28;
+  var DOT = 5.5, LABEL_DY = 26, FS = 15;
+  var W = 0, H = 0, narrow = false;
+  var nodes = [], hovered = null, mouse = { x: 0, y: 0, vx: 0, vy: 0, active: false }, running = false;
 
   function el(name, attrs) {
     var e = document.createElementNS(NS, name);
     for (var k in attrs) e.setAttribute(k, attrs[k]);
     return e;
   }
-  function curve(x1, y1, x2, y2, bend) {
-    var mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x2 - x1, dy = y2 - y1;
-    return 'M' + x1 + ',' + y1 + ' Q' + (mx - dy * bend) + ',' + (my + dx * bend) + ' ' + x2 + ',' + y2;
-  }
-  function sCurve(x1, y1, x2, y2) {
-    var mx = (x1 + x2) / 2;
-    return 'M' + x1 + ',' + y1 + ' C' + mx + ',' + y1 + ' ' + mx + ',' + y2 + ' ' + x2 + ',' + y2;
-  }
-
-  /* Textbreite messen */
   var cache = {};
-  function measure(text, size, cls) {
-    var key = text + '|' + size + '|' + cls;
-    if (cache[key]) return cache[key];
-    var t = el('text', { 'class': cls, 'font-size': size, x: -9999, y: -9999 });
+  function measure(text) {
+    if (cache[text]) return cache[text];
+    var t = el('text', { 'font-size': FS, x: -9999, y: -9999, 'font-family': 'Arial,Helvetica,sans-serif' });
     t.textContent = text;
     svg.appendChild(t);
     var w = t.getComputedTextLength();
     svg.removeChild(t);
-    cache[key] = w;
+    cache[text] = w;
     return w;
   }
-  var FS_MAIN = 16, FS_KID = 14;
-
-  function bandGap() { return MAIN.length > 6 ? 8 : 26; }
-  function neededHeight() {
-    var rows = 0;
-    MAIN.forEach(function (m) { rows += Math.max(1, m.kids.length); });
-    return 2 * PAD + rows * ROW + (MAIN.length - 1) * bandGap();
-  }
-
-  /* Beschriftungsrechteck eines Punktes (für die Überlappungsprüfung) */
-  function labelRect(x, y, len, right, gap) {
-    return right ? { l: x - 7, r: x + gap + len, t: y - 11, b: y + 11 } : { l: x - gap - len, r: x + 7, t: y - 11, b: y + 11 };
-  }
-  function hit(a, b, m) { return a.l < b.r + m && a.r > b.l - m && a.t < b.b + m && a.b > b.t - m; }
 
   /* 2) Lage berechnen */
-  function layout() {
-    var n = MAIN.length, L = { P: [], K: [], start: [] }, i, j;
-    var nameLen = measure(NAME, 14, 'name');
+  function neededHeight() { return Math.max(420, 2 * 40 + (ITEMS.length - 1) * 62); }
 
+  function positions() {
+    var n = ITEMS.length, P = [], i;
     if (narrow) {
-      var total = neededHeight(), gap = bandGap();
-      var y = Math.max(PAD, (H - total) / 2 + PAD);
-      var nx = 8, ny = H / 2, nameRight = nx + nameLen + 10;
-      L.name = { x: nx, y: ny, anchor: 'start' };
-      MAIN.forEach(function (m, idx) {
-        var rows = Math.max(1, m.kids.length);
-        var len = measure(m.label, FS_MAIN, 'main');
-        /* Mitte der Liste am weitesten rechts, Ränder näher am Namen: so kreuzen die Äste keine Beschriftung */
-        var mid = (n - 1) / 2;
-        var rel = n > 1 ? 1 - Math.abs(idx - mid) / mid : 1;
-        var x = nameRight + 40 + rel * 0.20 * W + (LEN[idx % LEN.length] - 0.75) * 0.04 * W;
-        x = Math.min(x, W - 8 - 16 - len);
-        var py = y + rows * ROW / 2;
-        L.P.push({ x: x, y: py });
-        L.start.push({ x: nameRight, y: ny });
-        var ks = [];
-        for (j = 0; j < m.kids.length; j++) {
-          var kl = measure(m.kids[j].label, FS_KID, 'kid');
-          ks.push({ x: Math.min(x + 0.26 * W, W - 8 - 12 - Math.min(kl, 0.3 * W)), y: y + (j + 0.5) * ROW });
-        }
-        L.K.push(ks);
-        y += rows * ROW + gap;
-      });
-      return L;
-    }
-
-    /* Breite Ansicht: rund um den Namen, Äste unterschiedlich lang */
-    var cx = W / 2, cy = H / 2;
-    var rx = Math.max(90, W / 2 - 140), ry = Math.max(90, H / 2 - 36);
-    var f = [], ang = [];
-    for (i = 0; i < n; i++) {
-      f[i] = LEN[i % LEN.length];
-      ang[i] = -Math.PI / 2 + (i + 0.5) * 2 * Math.PI / n + JIT[i % JIT.length] * (2 * Math.PI / n);
-    }
-    function pos(k) { return { x: cx + Math.cos(ang[k]) * rx * f[k], y: cy + Math.sin(ang[k]) * ry * f[k] }; }
-
-    var nameBox = { l: cx - nameLen / 2 - 14, r: cx + nameLen / 2 + 14, t: cy - 18, b: cy + 18 };
-    var lens = MAIN.map(function (m) { return measure(m.label, FS_MAIN, 'main'); });
-
-    /* Überlappungen auflösen: überlappende Äste leicht verkürzen oder verlängern */
-    for (var it = 0; it < 60; it++) {
-      var rects = [], changed = false;
+      var top = 40, step = n > 1 ? (H - 2 * top - LABEL_DY) / (n - 1) : 0;
+      for (i = 0; i < n; i++) P.push({ x: ZIGZAG[i % ZIGZAG.length] * W, y: top + i * step });
+    } else if (n === LAY10.length) {
+      for (i = 0; i < n; i++) P.push({ x: LAY10[i][0] * W, y: LAY10[i][1] * H });
+    } else {
       for (i = 0; i < n; i++) {
-        var p = pos(i);
-        rects.push(labelRect(p.x, p.y, lens[i], p.x >= cx, 16));
+        var r = Math.sqrt((i + 0.5) / n), a = i * 2.39996;
+        P.push({ x: W / 2 + r * 0.30 * W * Math.cos(a), y: H / 2 + r * 0.34 * H * Math.sin(a) });
       }
-      for (i = 0; i < n; i++) {
-        if (hit(rects[i], nameBox, 4)) { f[i] = Math.min(1.05, f[i] + 0.05); changed = true; }
-        for (j = i + 1; j < n; j++) {
-          if (hit(rects[i], rects[j], 5)) {
-            var k = (f[j] > 0.5) ? j : i;
-            f[k] = (f[k] > 0.5) ? f[k] - 0.05 : f[k] + 0.08;
-            changed = true;
-          }
+    }
+    return P;
+  }
+
+  /* Überlappende Beschriftungen leicht auseinanderschieben */
+  function relax(P) {
+    var n = P.length, lens = ITEMS.map(function (it) { return measure(it.label); });
+    function rect(i) { return { l: P[i].x - lens[i] / 2 - 8, r: P[i].x + lens[i] / 2 + 8, t: P[i].y - 12, b: P[i].y + LABEL_DY + 10 }; }
+    for (var it = 0; it < 120; it++) {
+      var moved = false;
+      for (var i = 0; i < n; i++) for (var j = i + 1; j < n; j++) {
+        var a = rect(i), b = rect(j);
+        var ox = Math.min(a.r, b.r) - Math.max(a.l, b.l), oy = Math.min(a.b, b.b) - Math.max(a.t, b.t);
+        if (ox > 0 && oy > 0) {
+          moved = true;
+          if (ox < oy) { var s = (P[i].x < P[j].x ? -1 : 1) * (ox / 2 + 0.5); P[i].x += s; P[j].x -= s; }
+          else { var s2 = (P[i].y < P[j].y ? -1 : 1) * (oy / 2 + 0.5); P[i].y += s2; P[j].y -= s2; }
         }
       }
-      if (!changed) break;
-    }
-
-    L.name = { x: cx, y: cy, anchor: 'middle' };
-    var hw = nameLen / 2 + 10, hh = 14;
-    for (i = 0; i < n; i++) {
-      var q = pos(i);
-      L.P.push(q);
-      var dx = q.x - cx, dy = q.y - cy, d = Math.sqrt(dx * dx + dy * dy) || 1;
-      var ux = dx / d, uy = dy / d;
-      var tx = Math.abs(ux) < 1e-6 ? Infinity : hw / Math.abs(ux);
-      var ty = Math.abs(uy) < 1e-6 ? Infinity : hh / Math.abs(uy);
-      var t = Math.min(tx, ty);
-      L.start.push({ x: cx + ux * t, y: cy + uy * t });
-    }
-    MAIN.forEach(function (m, idx) {
-      var p = L.P[idx], k = m.kids.length, ks = [];
-      var base = Math.atan2(p.y - cy, p.x - cx);
-      var dist = Math.max(90, Math.min(150, Math.min(W, H) * 0.20));
-      var span = Math.min(Math.PI * 0.95, (k - 1) * 0.62);
-      for (j = 0; j < k; j++) {
-        var a = base + (k === 1 ? 0 : -span / 2 + span * j / (k - 1));
-        var dd = dist * (1 + 0.25 * (j % 2));
-        ks.push({
-          x: Math.max(24, Math.min(W - 24, p.x + Math.cos(a) * dd)),
-          y: Math.max(24, Math.min(H - 24, p.y + Math.sin(a) * dd))
-        });
+      for (var k = 0; k < n; k++) {
+        P[k].x = Math.max(lens[k] / 2 + 14, Math.min(W - lens[k] / 2 - 14, P[k].x));
+        P[k].y = Math.max(22, Math.min(H - LABEL_DY - 14, P[k].y));
       }
-      L.K.push(ks);
-    });
-    L.cx = cx; L.cy = cy;
-    return L;
-  }
-
-  /* Beschriftung so setzen, dass sie in die Fläche passt, sonst kürzen */
-  function placeLabel(t, x, y, preferRight, gap, label) {
-    var right = preferRight;
-    t.textContent = label;
-    t.setAttribute('y', y);
-    function set(r) { t.setAttribute('text-anchor', r ? 'start' : 'end'); t.setAttribute('x', r ? x + gap : x - gap); t.setAttribute('class', r ? 'start' : 'end'); }
-    set(right);
-    var len = t.getComputedTextLength();
-    var availR = W - (x + gap) - 6, availL = (x - gap) - 6;
-    if (right && len > availR && availL >= len) { right = false; set(false); }
-    else if (!right && len > availL && availR >= len) { right = true; set(true); }
-    var avail = right ? availR : availL;
-    if (len > avail) {
-      var s = label;
-      while (s.length > 1 && t.getComputedTextLength() > avail) { s = s.slice(0, -1); t.textContent = s.replace(/\s+$/, '') + '…'; }
+      if (!moved) break;
     }
-    return right;
-  }
-
-  /* Klickfläche: vom Punkt bis zum Ende der Beschriftung, damit auch die Schrift anklickbar ist */
-  function addLabelHit(group, t, x, y, right) {
-    var bb = t.getBBox();
-    var left = right ? x - 14 : bb.x - 6;
-    var rightEdge = right ? bb.x + bb.width + 6 : x + 14;
-    var h = Math.max(bb.height + 6, 24);
-    var rect = el('rect', { 'class': 'hit', x: left, y: y - h / 2, width: rightEdge - left, height: h });
-    group.insertBefore(rect, t);
-  }
-
-  function node(href, cls, label, x, y, hitR, ringR, dotR) {
-    var a = el('a', { 'class': 'node ' + cls, href: href, 'aria-label': label });
-    a.appendChild(el('circle', { 'class': 'hit', cx: x, cy: y, r: hitR }));
-    a.appendChild(el('circle', { 'class': 'ring', cx: x, cy: y, r: ringR }));
-    a.appendChild(el('circle', { 'class': 'dot', cx: x, cy: y, r: dotR }));
-    return a;
+    return P;
   }
 
   /* 3) Zeichnen */
@@ -303,42 +178,58 @@ body:not(.js) svg{display:none}
     H = Math.max(box.getBoundingClientRect().height, need);
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
     while (svg.firstChild) svg.removeChild(svg.firstChild);
+    nodes = []; hovered = null;
 
-    var L = layout();
-    var edges = el('g', {}), nodes = el('g', {});
-    svg.appendChild(edges);
-    svg.appendChild(nodes);
-
-    var nm = el('text', { 'class': 'name', x: L.name.x, y: L.name.y, 'text-anchor': L.name.anchor, 'dominant-baseline': 'central' });
-    nm.textContent = NAME;
-    svg.appendChild(nm);
-
-    MAIN.forEach(function (m, i) {
-      var p = L.P[i], s = L.start[i];
-      edges.appendChild(el('path', { 'class': 'edge', d: narrow ? sCurve(s.x, s.y, p.x, p.y) : curve(s.x, s.y, p.x, p.y, BEND[i % BEND.length]) }));
-      L.K[i].forEach(function (q) {
-        edges.appendChild(el('path', { 'class': 'edge', d: narrow ? sCurve(p.x, p.y, q.x, q.y) : curve(p.x, p.y, q.x, q.y, -0.12) }));
+    var P = relax(positions());
+    ITEMS.forEach(function (it, i) {
+      var x = P[i].x, y = P[i].y, len = measure(it.label);
+      var a = el('a', { 'class': 'node', href: it.href, 'aria-label': it.label });
+      a.appendChild(el('rect', { 'class': 'hit', x: x - len / 2 - 10, y: y - 14, width: len + 20, height: LABEL_DY + 28, rx: 4 }));
+      a.appendChild(el('circle', { 'class': 'dot', cx: x, cy: y, r: DOT }));
+      var t = el('text', { x: x, y: y + LABEL_DY, 'text-anchor': 'middle', 'dominant-baseline': 'central' });
+      t.textContent = it.label;
+      a.appendChild(t);
+      svg.appendChild(a);
+      var n = { el: a, hx: x, hy: y, x: x, y: y, vx: 0, vy: 0 };
+      nodes.push(n);
+      a.addEventListener('pointerenter', function (e) {
+        if (e.pointerType !== 'mouse' || reduce) return;
+        hovered = n;                                          /* kleiner Stups beim Darüberfahren */
+        n.vx += Math.max(-3, Math.min(3, mouse.vx * 0.2));
+        n.vy += Math.max(-3, Math.min(3, mouse.vy * 0.2));
+        kick();
       });
-    });
-
-    MAIN.forEach(function (m, i) {
-      var p = L.P[i];
-      var a = node(m.href, 'main', m.label, p.x, p.y, 28, 13, 5.5);
-      var t = el('text', { 'dominant-baseline': 'central' });
-      nodes.appendChild(a); a.appendChild(t);
-      var rightM = placeLabel(t, p.x, p.y, narrow ? true : p.x >= L.cx, 16, m.label);
-      addLabelHit(a, t, p.x, p.y, rightM);
-
-      m.kids.forEach(function (k, j) {
-        var q = L.K[i][j];
-        var b = node(k.href, 'kid', k.label, q.x, q.y, 16, 9, 3.5);
-        var u = el('text', { 'dominant-baseline': 'central' });
-        nodes.appendChild(b); b.appendChild(u);
-        var rightK = placeLabel(u, q.x, q.y, narrow ? true : q.x >= p.x, 12, k.label);
-        addLabelHit(b, u, q.x, q.y, rightK);
-      });
+      a.addEventListener('pointerleave', function () { if (hovered === n) hovered = null; });
     });
   }
+
+  /* 4) Weiche Bewegung: Punkte in der Nähe der Maus weichen leicht aus und federn zurück */
+  function step() {
+    var moving = false;
+    nodes.forEach(function (n) {
+      var ax = (n.hx - n.x) * SPRING, ay = (n.hy - n.y) * SPRING;
+      if (mouse.active && n !== hovered) {
+        var dx = n.x - mouse.x, dy = n.y - mouse.y, d = Math.sqrt(dx * dx + dy * dy);
+        if (d < R && d > 0.01) { var f = Math.pow(1 - d / R, 2) * PUSH; ax += dx / d * f; ay += dy / d * f; }
+      }
+      n.vx = (n.vx + ax) * DAMP; n.vy = (n.vy + ay) * DAMP;
+      n.x += n.vx; n.y += n.vy;
+      if (Math.abs(n.vx) > 0.02 || Math.abs(n.vy) > 0.02 || Math.abs(n.x - n.hx) > 0.1 || Math.abs(n.y - n.hy) > 0.1) moving = true;
+      else { n.x = n.hx; n.y = n.hy; n.vx = n.vy = 0; }
+      n.el.setAttribute('transform', 'translate(' + (n.x - n.hx).toFixed(2) + ',' + (n.y - n.hy).toFixed(2) + ')');
+    });
+    if (moving || mouse.active) requestAnimationFrame(step); else running = false;
+  }
+  function kick() { if (!running && !reduce) { running = true; requestAnimationFrame(step); } }
+
+  svg.addEventListener('pointermove', function (e) {
+    if (e.pointerType !== 'mouse' || reduce) return;
+    var r = svg.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    mouse.vx = mouse.active ? x - mouse.x : 0; mouse.vy = mouse.active ? y - mouse.y : 0;
+    mouse.x = x; mouse.y = y; mouse.active = true;
+    kick();
+  });
+  svg.addEventListener('pointerleave', function () { mouse.active = false; hovered = null; kick(); });
 
   var t0;
   window.addEventListener('resize', function () { clearTimeout(t0); t0 = setTimeout(render, 60); });
