@@ -17,8 +17,13 @@ a:focus-visible{outline:2px solid #000;outline-offset:3px}
 h1,h2,h3,p,ul{margin:0}
 h1,h2,h3{font-size:16px;font-weight:400}
 .page{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
-.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 32px;padding:28px 0 0}
-.top .name{font-size:clamp(20px,1.8vw,26px);text-decoration:none}
+.top{display:flex;justify-content:center;padding:28px 0 0}
+.home{display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;padding:4px 14px}
+.home .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);transition:transform .2s ease}
+.home .back{font-size:15px;transition:color .2s ease}
+.home:hover .dot,.home:focus-visible .dot{transform:scale(1.35)}
+.home:hover .back,.home:focus-visible .back{color:var(--accent)}
+.home:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gap)}
 .row > .label{grid-column:1 / 4}
 .row > .content{grid-column:4 / 13;max-width:42em}
@@ -34,13 +39,14 @@ main{padding:clamp(64px,10vw,140px) 0 clamp(64px,10vw,140px)}
   .row > .label{margin-bottom:24px;color:var(--muted)}
 }
 </style>
-</head>
-<body>
-<div class="page">
-  <header class="top">
-    <a class="name" href="index.html">Gina-Marie Bross</a>
-    <nav><a href="index.html">zurück</a></nav>
-  </header>
+
+<header class="top">
+  <a class="home" href="index.html" aria-label="Zurück zur Startseite">
+    <span class="dot"></span>
+    <span class="back">back</span>
+  </a>
+</header>
+ 
   <main class="row">
     <h1 class="label">Impressum</h1>
     <div class="content doc">
