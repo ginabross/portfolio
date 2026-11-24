@@ -64,7 +64,7 @@ body:not(.js) svg{display:none}
       <ul>
         <li><a href="das-was-nie-dagewesen-ist.html">das, was nie dagewesen ist</a></li>
         <li><a href="ral-6031.html">Ral-6031</a></li>
-        <li><a href="was-jetzt-das-ist.html">was jetzt das ist</a></li>
+        <li><a href="was-jetzt-das-ist.html">how to reclaim the city</a></li>
         <li><a href="permeabilities.html">permeabilities</a></li>
         <li><a href="research.html">research</a></li>
         <li><a href="memories-of-some-place.html">memories of some place</a></li>
@@ -72,6 +72,7 @@ body:not(.js) svg{display:none}
         <li><a href="untitled.html">untitled</a></li>
         <li><a href="nowhere-to-go-everything-to-see.html">nowhere to go/everything to see</a></li>
         <li><a href="statement.html">statement</a></li>
+        <li><a href="tor-3.html">tor 3</a></li>
       </ul>
     </nav>
   </main>
@@ -96,9 +97,10 @@ body:not(.js) svg{display:none}
     return { label: a.textContent.trim(), href: a.getAttribute('href') };
   });
 
-  /* Lage der zehn Punkte (Anteile der Fläche, eng zusammen). Bei anderer Anzahl wird automatisch verteilt. */
+  /* Lage der Punkte (Anteile der Fläche, eng zusammen) für 10 und 11 Punkte. Bei anderer Anzahl wird automatisch verteilt. */
   var LAY10 = [[0.636, 0.271], [0.751, 0.448], [0.496, 0.352], [0.661, 0.604], [0.398, 0.285],
                [0.339, 0.515], [0.526, 0.567], [0.419, 0.700], [0.270, 0.352], [0.585, 0.744]];
+  var LAYOUTS = { 10: LAY10, 11: LAY10.concat([[0.262, 0.655]]) };
   var ZIGZAG = [0.28, 0.72, 0.45, 0.78, 0.22, 0.58, 0.30, 0.74, 0.40, 0.66];
 
   /* Bewegung bei der Maus: Radius, Stärke, Feder, Dämpfung */
@@ -134,8 +136,8 @@ body:not(.js) svg{display:none}
     if (narrow) {
       var top = 40, step = n > 1 ? (H - 2 * top - LABEL_DY) / (n - 1) : 0;
       for (i = 0; i < n; i++) P.push({ x: ZIGZAG[i % ZIGZAG.length] * W, y: top + i * step });
-    } else if (n === LAY10.length) {
-      for (i = 0; i < n; i++) P.push({ x: LAY10[i][0] * W, y: LAY10[i][1] * H });
+    } else if (LAYOUTS[n]) {
+      for (i = 0; i < n; i++) P.push({ x: LAYOUTS[n][i][0] * W, y: LAYOUTS[n][i][1] * H });
     } else {
       for (i = 0; i < n; i++) {
         var r = Math.sqrt((i + 0.5) / n), a = i * 2.39996;
