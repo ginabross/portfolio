@@ -22,11 +22,16 @@ h1 a{text-decoration:none}
 
 .page{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
 
-/* Kopfzeile */
-.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 32px;padding:28px 0 0}
-.top nav{display:flex;flex-wrap:wrap;gap:6px 24px}
-.top nav a[aria-current]{text-decoration:none}
+top{display:flex;justify-content:center;padding:28px 0 0}
+.home{display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;padding:4px 14px}
+.home .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);transition:transform .2s ease}
+.home .back{font-size:15px;transition:color .2s ease}
+.home:hover .dot,.home:focus-visible .dot{transform:scale(1.35)}
+.home:hover .back,.home:focus-visible .back{color:var(--accent)}
+.home:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 
+main{flex:1;padding:clamp(48px,7vw,96px) 0 clamp(56px,8vw,110px)}
+.row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gap)}
 /* Fotofeld: locker verstreut angeordnet */
 .field{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gap);row-gap:clamp(32px,6vw,88px);align-items:start;padding:clamp(56px,9vw,128px) 0 clamp(64px,10vw,140px)}
 .field img{display:block;width:100%;height:auto;background:#f3f3f3;cursor:zoom-in}
